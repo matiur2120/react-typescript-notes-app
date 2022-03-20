@@ -1,25 +1,42 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+
+import Header from "./components/Header";
+import NotesList from "./components/NotesList";
+import AddNote from "./components/AddNote";
+import { Note } from "./models/Note.model";
+import { Container, Row, Col } from "react-bootstrap";
 
 function App() {
+  const [notes, setNotes] = useState<Note[]>([
+    {
+      id: Date.now(),
+      title: "New note for demo",
+      text: "Some text goes here",
+      color: "#e5e5e5",
+      date: new Date().toString(),
+    },
+  ]);
+  console.log(notes);
+  const handleDelete = (id: number) => {
+    setNotes(notes.filter((note) => note.id !== id));
+    console.log(id);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Header title="React Typescript Notes  App" />
+      <Container className="mt-5">
+        <Row>
+          <Col>
+            <NotesList notes={notes} handleDelete={handleDelete} />
+          </Col>
+        </Row>
+        <Row className="mt-5">
+          <h2>Add Note</h2>
+          <AddNote notes={notes} setNotes={setNotes} />
+        </Row>
+      </Container>
+    </>
   );
 }
 
